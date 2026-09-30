@@ -6,63 +6,183 @@
 
     <title>Mi Antioquia</title>
 
+    <!-- Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #f4f5f7;
-            color: #222;
+            background: #f3f4f6;
+            color: #1f2937;
         }
 
         header {
-            background: #1f2937;
+            background: #172033;
             color: white;
-            padding: 25px;
             text-align: center;
+            padding: 25px 15px;
         }
 
         header h1 {
-            margin: 0 0 10px;
+            margin: 0 0 8px;
             font-size: 32px;
         }
 
         .contador {
-            font-size: 20px;
+            font-size: 21px;
         }
 
         main {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 20px;
+            width: 95%;
+            max-width: 1200px;
+            margin: 25px auto;
         }
 
-        .tarjeta {
+        .panel {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
+            border-radius: 16px;
+            padding: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .estadisticas {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
             text-align: center;
+        }
+
+        .estadistica {
+            min-width: 130px;
+        }
+
+        .numero {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .texto {
+            color: #6b7280;
+            font-size: 14px;
         }
 
         .progreso {
             width: 100%;
-            height: 20px;
+            height: 18px;
             background: #e5e7eb;
             border-radius: 20px;
             overflow: hidden;
-            margin: 20px 0;
+            margin: 15px 0 25px;
         }
 
         .barra {
-            height: 100%;
             width: 0%;
+            height: 100%;
             background: #22c55e;
-            transition: width 0.3s;
+            transition: width 0.3s ease;
         }
 
-        .mensaje {
-            margin-top: 20px;
+        #mapa {
+            width: 100%;
+            height: 700px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #d1d5db;
+        }
+
+        .leyenda {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .leyenda-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid #777;
+        }
+
+        .no-visitado {
+            background: #d1d5db;
+        }
+
+        .visitado {
+            background: #22c55e;
+        }
+
+        .boton {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .boton-visitar {
+            background: #22c55e;
+            color: white;
+        }
+
+        .boton-quitar {
+            background: #ef4444;
+            color: white;
+        }
+
+        .boton:hover {
+            opacity: 0.85;
+        }
+
+        .leaflet-popup-content {
+            text-align: center;
+            min-width: 160px;
+        }
+
+        .nombre-municipio {
             font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .estado-municipio {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        @media (max-width: 700px) {
+
+            header h1 {
+                font-size: 25px;
+            }
+
+            .contador {
+                font-size: 18px;
+            }
+
+            #mapa {
+                height: 550px;
+            }
         }
     </style>
 </head>
@@ -71,32 +191,375 @@
 
 <header>
     <h1>MI ANTIOQUIA</h1>
+
     <div class="contador">
-        <span id="visitados">0</span> / 125 municipios visitados
+        <span id="contador">0</span> / 125 municipios visitados
     </div>
 </header>
 
 <main>
 
-    <div class="tarjeta">
+    <div class="panel">
 
-        <h2>Progreso</h2>
+        <div class="estadisticas">
+
+            <div class="estadistica">
+                <div class="numero" id="numeroVisitados">0</div>
+                <div class="texto">Visitados</div>
+            </div>
+
+            <div class="estadistica">
+                <div class="numero" id="numeroPendientes">125</div>
+                <div class="texto">Pendientes</div>
+            </div>
+
+            <div class="estadistica">
+                <div class="numero" id="porcentaje">0%</div>
+                <div class="texto">Antioquia recorrido</div>
+            </div>
+
+        </div>
 
         <div class="progreso">
             <div class="barra" id="barra"></div>
         </div>
 
-        <div id="porcentaje">
-            0%
-        </div>
+        <div id="mapa"></div>
 
-        <div class="mensaje">
-            Próximamente podrás marcar cada municipio que hayas visitado.
+        <div class="leyenda">
+
+            <div class="leyenda-item">
+                <div class="color no-visitado"></div>
+                No visitado
+            </div>
+
+            <div class="leyenda-item">
+                <div class="color visitado"></div>
+                Visitado
+            </div>
+
         </div>
 
     </div>
 
 </main>
+
+
+<!-- Leaflet -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+    // ============================================
+    // CONFIGURACIÓN
+    // ============================================
+
+    const TOTAL_MUNICIPIOS = 125;
+
+    const GEOJSON_URL =
+        "https://raw.githubusercontent.com/ytolosa/mapas-colombia/main/output/geojson/col_municipios_real_nacional.geojson";
+
+
+    // ============================================
+    // MUNICIPIOS VISITADOS
+    // ============================================
+
+    let visitados = JSON.parse(
+        localStorage.getItem("municipiosVisitadosAntioquia")
+    ) || [];
+
+
+    // ============================================
+    // MAPA
+    // ============================================
+
+    const mapa = L.map("mapa", {
+        zoomControl: true
+    });
+
+
+    // No usamos mapa base porque queremos que
+    // Antioquia sea el elemento principal.
+
+    mapa.setView([6.5, -75.5], 7);
+
+
+    // ============================================
+    // ESTILO DE LOS MUNICIPIOS
+    // ============================================
+
+    function estiloMunicipio(feature) {
+
+        const codigo = feature.properties.divipola_mun;
+
+        const estaVisitado = visitados.includes(codigo);
+
+        return {
+            fillColor: estaVisitado ? "#22c55e" : "#d1d5db",
+            weight: 1,
+            color: "#555",
+            fillOpacity: 0.85
+        };
+    }
+
+
+    // ============================================
+    // ACTUALIZAR CONTADOR
+    // ============================================
+
+    function actualizarEstadisticas() {
+
+        const cantidad = visitados.length;
+
+        const porcentaje =
+            ((cantidad / TOTAL_MUNICIPIOS) * 100).toFixed(1);
+
+        document.getElementById("contador").textContent = cantidad;
+
+        document.getElementById("numeroVisitados").textContent =
+            cantidad;
+
+        document.getElementById("numeroPendientes").textContent =
+            TOTAL_MUNICIPIOS - cantidad;
+
+        document.getElementById("porcentaje").textContent =
+            porcentaje + "%";
+
+        document.getElementById("barra").style.width =
+            porcentaje + "%";
+    }
+
+
+    // ============================================
+    // GUARDAR
+    // ============================================
+
+    function guardarVisitas() {
+
+        localStorage.setItem(
+            "municipiosVisitadosAntioquia",
+            JSON.stringify(visitados)
+        );
+    }
+
+
+    // ============================================
+    // MARCAR MUNICIPIO
+    // ============================================
+
+    function cambiarEstado(codigo, nombre, capa) {
+
+        const indice = visitados.indexOf(codigo);
+
+        if (indice === -1) {
+
+            visitados.push(codigo);
+
+        } else {
+
+            visitados.splice(indice, 1);
+
+        }
+
+        guardarVisitas();
+
+        capa.setStyle(estiloMunicipio);
+
+        actualizarEstadisticas();
+
+        mostrarPopup(capa, codigo, nombre);
+    }
+
+
+    // ============================================
+    // POPUP
+    // ============================================
+
+    function mostrarPopup(capa, codigo, nombre) {
+
+        const estaVisitado =
+            visitados.includes(codigo);
+
+        const estado = estaVisitado
+            ? "✓ Visitado"
+            : "No visitado";
+
+        const claseBoton = estaVisitado
+            ? "boton boton-quitar"
+            : "boton boton-visitar";
+
+        const textoBoton = estaVisitado
+            ? "Marcar como no visitado"
+            : "Marcar como visitado";
+
+
+        const contenido = `
+
+            <div class="nombre-municipio">
+                ${nombre}
+            </div>
+
+            <div class="estado-municipio">
+                ${estado}
+            </div>
+
+            <button
+                class="${claseBoton}"
+                onclick="cambiarDesdePopup('${codigo}')"
+            >
+                ${textoBoton}
+            </button>
+
+        `;
+
+        capa.bindPopup(contenido).openPopup();
+    }
+
+
+    // ============================================
+    // CAMBIO DESDE EL POPUP
+    // ============================================
+
+    function cambiarDesdePopup(codigo) {
+
+        const capa = capasMunicipios[codigo];
+
+        if (!capa) return;
+
+        const nombre =
+            capa.feature.properties.mpio_nombre;
+
+        cambiarEstado(
+            codigo,
+            nombre,
+            capa
+        );
+    }
+
+
+    // ============================================
+    // GUARDAR REFERENCIA DE CADA MUNICIPIO
+    // ============================================
+
+    const capasMunicipios = {};
+
+
+    // ============================================
+    // CARGAR GEOJSON
+    // ============================================
+
+    fetch(GEOJSON_URL)
+
+        .then(respuesta => {
+
+            if (!respuesta.ok) {
+                throw new Error(
+                    "No se pudo cargar el mapa"
+                );
+            }
+
+            return respuesta.json();
+
+        })
+
+        .then(datos => {
+
+            // Nos quedamos únicamente con Antioquia.
+            const antioquia =
+                datos.features.filter(feature =>
+                    feature.properties.divipola_dep === "05"
+                );
+
+
+            const capa = L.geoJSON(antioquia, {
+
+                style: estiloMunicipio,
+
+                onEachFeature: function(feature, layer) {
+
+                    const codigo =
+                        feature.properties.divipola_mun;
+
+                    const nombre =
+                        feature.properties.mpio_nombre;
+
+                    capasMunicipios[codigo] = layer;
+
+
+                    layer.on({
+
+                        mouseover: function(e) {
+
+                            e.target.setStyle({
+                                weight: 2,
+                                color: "#111",
+                                fillOpacity: 0.95
+                            });
+
+                        },
+
+                        mouseout: function(e) {
+
+                            e.target.setStyle(
+                                estiloMunicipio(feature)
+                            );
+
+                        },
+
+                        click: function() {
+
+                            mostrarPopup(
+                                layer,
+                                codigo,
+                                nombre
+                            );
+
+                        }
+
+                    });
+
+                }
+
+            }).addTo(mapa);
+
+
+            // Ajustar mapa a Antioquia
+            mapa.fitBounds(capa.getBounds());
+
+            actualizarEstadisticas();
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+            document.getElementById("mapa").innerHTML = `
+
+                <div style="
+                    padding:30px;
+                    text-align:center;
+                    color:#b91c1c;
+                ">
+
+                    <h3>Error cargando el mapa</h3>
+
+                    <p>
+                        No se pudo cargar la información
+                        geográfica de los municipios.
+                    </p>
+
+                    <p>
+                        Revisa la consola del navegador.
+                    </p>
+
+                </div>
+
+            `;
+
+        });
+
+</script>
 
 </body>
 </html>
