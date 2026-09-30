@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Mi Antioquia</title>
 
@@ -10,71 +15,97 @@
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    />
+    >
 
     <style>
+
         * {
             box-sizing: border-box;
         }
 
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             background: #f3f4f6;
             color: #1f2937;
         }
+
+        /* =========================
+           ENCABEZADO
+        ========================= */
 
         header {
             background: #172033;
             color: white;
             text-align: center;
-            padding: 25px 15px;
+            padding: 24px 15px;
         }
 
         header h1 {
             margin: 0 0 8px;
-            font-size: 32px;
+            font-size: 34px;
         }
 
-        .contador {
-            font-size: 21px;
+        .subtitulo {
+            font-size: 18px;
+            opacity: 0.9;
         }
+
+
+        /* =========================
+           CONTENEDOR PRINCIPAL
+        ========================= */
 
         main {
-            width: 95%;
-            max-width: 1200px;
+            width: 94%;
+            max-width: 1250px;
             margin: 25px auto;
         }
 
         .panel {
             background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
 
+
+        /* =========================
+           ESTADÍSTICAS
+        ========================= */
+
         .estadisticas {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-            text-align: center;
+            display: grid;
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 18px;
         }
 
         .estadistica {
-            min-width: 130px;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
         }
 
         .numero {
-            font-size: 28px;
+            font-size: 30px;
             font-weight: bold;
         }
 
         .texto {
-            color: #6b7280;
+            margin-top: 4px;
+            color: #64748b;
             font-size: 14px;
         }
+
+
+        /* =========================
+           BARRA DE PROGRESO
+        ========================= */
 
         .progreso {
             width: 100%;
@@ -82,484 +113,1285 @@
             background: #e5e7eb;
             border-radius: 20px;
             overflow: hidden;
-            margin: 15px 0 25px;
+            margin-bottom: 22px;
         }
 
         .barra {
             width: 0%;
             height: 100%;
             background: #22c55e;
-            transition: width 0.3s ease;
+            transition: width 0.35s ease;
         }
+
+
+        /* =========================
+           CONTROLES
+        ========================= */
+
+        .controles {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .buscador {
+            flex: 1;
+            min-width: 220px;
+
+            padding: 12px 15px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+
+            font-size: 16px;
+            outline: none;
+        }
+
+        .buscador:focus {
+            border-color: #22c55e;
+            box-shadow:
+                0 0 0 2px rgba(34,197,94,0.15);
+        }
+
+        .boton {
+            border: none;
+            border-radius: 10px;
+
+            padding: 11px 16px;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .boton:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+
+        .boton-verde {
+            background: #22c55e;
+            color: white;
+        }
+
+        .boton-gris {
+            background: #64748b;
+            color: white;
+        }
+
+        .boton-rojo {
+            background: #ef4444;
+            color: white;
+        }
+
+
+        /* =========================
+           MAPA
+        ========================= */
 
         #mapa {
             width: 100%;
-            height: 700px;
-            border-radius: 12px;
+            height: 650px;
+
+            border-radius: 14px;
+
             overflow: hidden;
+
             border: 1px solid #d1d5db;
         }
 
+
+        /* =========================
+           LEYENDA
+        ========================= */
+
         .leyenda {
             display: flex;
+
             justify-content: center;
+
             gap: 25px;
-            margin-top: 18px;
+
+            margin-top: 15px;
+
             flex-wrap: wrap;
         }
 
         .leyenda-item {
             display: flex;
             align-items: center;
+
             gap: 8px;
+
             font-size: 14px;
         }
 
         .color {
-            width: 20px;
-            height: 20px;
+            width: 19px;
+            height: 19px;
+
             border-radius: 4px;
+
             border: 1px solid #777;
         }
 
-        .no-visitado {
+        .color-no {
             background: #d1d5db;
         }
 
-        .visitado {
+        .color-si {
             background: #22c55e;
         }
 
-        .boton {
-            border: none;
-            padding: 10px 15px;
+
+        /* =========================
+           LISTA DE MUNICIPIOS
+        ========================= */
+
+        .lista-contenedor {
+            margin-top: 25px;
+
+            border-top: 1px solid #e5e7eb;
+
+            padding-top: 20px;
+        }
+
+        .lista-contenedor h2 {
+            margin-top: 0;
+        }
+
+        #listaMunicipios {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fill, minmax(180px, 1fr));
+
+            gap: 8px;
+        }
+
+        .municipio-lista {
+            background: #f0fdf4;
+
+            border: 1px solid #bbf7d0;
+
             border-radius: 8px;
+
+            padding: 9px;
+
             cursor: pointer;
-            font-weight: bold;
+
             font-size: 14px;
-            margin-top: 8px;
+
+            transition: 0.2s;
         }
 
-        .boton-visitar {
-            background: #22c55e;
-            color: white;
+        .municipio-lista:hover {
+            background: #dcfce7;
+            transform: translateY(-1px);
         }
 
-        .boton-quitar {
-            background: #ef4444;
-            color: white;
-        }
 
-        .boton:hover {
-            opacity: 0.85;
-        }
+        /* =========================
+           POPUP DEL MAPA
+        ========================= */
 
         .leaflet-popup-content {
             text-align: center;
-            min-width: 160px;
+
+            min-width: 190px;
+
+            margin: 15px;
         }
 
         .nombre-municipio {
-            font-size: 18px;
+            font-size: 19px;
+
             font-weight: bold;
-            margin-bottom: 5px;
+
+            margin-bottom: 7px;
         }
 
         .estado-municipio {
-            margin-bottom: 8px;
-            color: #555;
+            margin-bottom: 10px;
+
+            color: #64748b;
         }
+
+        .popup-boton {
+            border: none;
+
+            border-radius: 8px;
+
+            padding: 10px 12px;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            width: 100%;
+        }
+
+        .popup-visitar {
+            background: #22c55e;
+        }
+
+        .popup-quitar {
+            background: #ef4444;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
 
         @media (max-width: 700px) {
 
-            header h1 {
-                font-size: 25px;
+            header {
+                padding: 20px 10px;
             }
 
-            .contador {
-                font-size: 18px;
+            header h1 {
+                font-size: 27px;
+            }
+
+            .subtitulo {
+                font-size: 16px;
+            }
+
+            main {
+                width: 96%;
+                margin: 12px auto;
+            }
+
+            .panel {
+                padding: 14px;
+                border-radius: 14px;
+            }
+
+            .estadisticas {
+                grid-template-columns:
+                    repeat(3, 1fr);
+
+                gap: 7px;
+            }
+
+            .estadistica {
+                padding: 10px 5px;
+            }
+
+            .numero {
+                font-size: 23px;
+            }
+
+            .texto {
+                font-size: 12px;
             }
 
             #mapa {
                 height: 550px;
             }
+
+            .controles {
+                flex-direction: column;
+            }
+
+            .buscador {
+                width: 100%;
+            }
+
+            .boton {
+                width: 100%;
+            }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <header>
+
     <h1>MI ANTIOQUIA</h1>
 
-    <div class="contador">
-        <span id="contador">0</span> / 125 municipios visitados
+    <div class="subtitulo">
+        <span id="contador">0</span>
+        / 125 municipios visitados
     </div>
+
 </header>
+
 
 <main>
 
     <div class="panel">
 
+
+        <!-- ESTADÍSTICAS -->
+
         <div class="estadisticas">
 
             <div class="estadistica">
-                <div class="numero" id="numeroVisitados">0</div>
-                <div class="texto">Visitados</div>
+
+                <div
+                    class="numero"
+                    id="numeroVisitados"
+                >
+                    0
+                </div>
+
+                <div class="texto">
+                    Visitados
+                </div>
+
             </div>
 
-            <div class="estadistica">
-                <div class="numero" id="numeroPendientes">125</div>
-                <div class="texto">Pendientes</div>
-            </div>
 
             <div class="estadistica">
-                <div class="numero" id="porcentaje">0%</div>
-                <div class="texto">Antioquia recorrido</div>
+
+                <div
+                    class="numero"
+                    id="numeroPendientes"
+                >
+                    125
+                </div>
+
+                <div class="texto">
+                    Pendientes
+                </div>
+
+            </div>
+
+
+            <div class="estadistica">
+
+                <div
+                    class="numero"
+                    id="porcentaje"
+                >
+                    0%
+                </div>
+
+                <div class="texto">
+                    Antioquia recorrido
+                </div>
+
             </div>
 
         </div>
+
+
+        <!-- PROGRESO -->
 
         <div class="progreso">
-            <div class="barra" id="barra"></div>
+
+            <div
+                class="barra"
+                id="barra"
+            ></div>
+
         </div>
 
+
+        <!-- BUSCADOR -->
+
+        <div class="controles">
+
+            <input
+                type="text"
+                id="buscador"
+                class="buscador"
+                placeholder="Buscar municipio..."
+            >
+
+            <button
+                class="boton boton-verde"
+                onclick="mostrarVisitados()"
+            >
+                Mis municipios
+            </button>
+
+            <button
+                class="boton boton-gris"
+                onclick="mostrarTodos()"
+            >
+                Mostrar todos
+            </button>
+
+            <button
+                class="boton boton-rojo"
+                onclick="reiniciarProgreso()"
+            >
+                Reiniciar
+            </button>
+
+        </div>
+
+
+        <!-- MAPA -->
+
         <div id="mapa"></div>
+
+
+        <!-- LEYENDA -->
 
         <div class="leyenda">
 
             <div class="leyenda-item">
-                <div class="color no-visitado"></div>
+
+                <div class="color color-no"></div>
+
                 No visitado
+
             </div>
 
+
             <div class="leyenda-item">
-                <div class="color visitado"></div>
+
+                <div class="color color-si"></div>
+
                 Visitado
+
             </div>
 
         </div>
+
+
+        <!-- LISTA -->
+
+        <div class="lista-contenedor">
+
+            <h2 id="tituloLista">
+                Mis municipios visitados
+            </h2>
+
+            <div id="listaMunicipios"></div>
+
+        </div>
+
 
     </div>
 
 </main>
 
 
-<!-- Leaflet -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- LEAFLET -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
 
 <script>
 
-    // ============================================
-    // CONFIGURACIÓN
-    // ============================================
 
-    const TOTAL_MUNICIPIOS = 125;
+// =====================================================
+// CONFIGURACIÓN
+// =====================================================
 
-    const GEOJSON_URL =
-        "https://raw.githubusercontent.com/ytolosa/mapas-colombia/main/output/geojson/col_municipios_real_nacional.geojson";
+const TOTAL_MUNICIPIOS = 125;
 
 
-    // ============================================
-    // MUNICIPIOS VISITADOS
-    // ============================================
-
-    let visitados = JSON.parse(
-        localStorage.getItem("municipiosVisitadosAntioquia")
-    ) || [];
+const GEOJSON_URL =
+"https://raw.githubusercontent.com/ytolosa/mapas-colombia/main/output/geojson/col_municipios_real_nacional.geojson";
 
 
-    // ============================================
-    // MAPA
-    // ============================================
+// =====================================================
+// MUNICIPIOS VISITADOS
+// =====================================================
 
-    const mapa = L.map("mapa", {
-        zoomControl: true
-    });
+let visitados = JSON.parse(
 
+    localStorage.getItem(
+        "municipiosVisitadosAntioquia"
+    )
 
-    // No usamos mapa base porque queremos que
-    // Antioquia sea el elemento principal.
-
-    mapa.setView([6.5, -75.5], 7);
+) || [];
 
 
-    // ============================================
-    // ESTILO DE LOS MUNICIPIOS
-    // ============================================
+// =====================================================
+// MAPA
+// =====================================================
 
-    function estiloMunicipio(feature) {
+const mapa = L.map("mapa", {
 
-        const codigo = feature.properties.divipola_mun;
+    zoomControl: true
 
-        const estaVisitado = visitados.includes(codigo);
-
-        return {
-            fillColor: estaVisitado ? "#22c55e" : "#d1d5db",
-            weight: 1,
-            color: "#555",
-            fillOpacity: 0.85
-        };
-    }
+});
 
 
-    // ============================================
-    // ACTUALIZAR CONTADOR
-    // ============================================
-
-    function actualizarEstadisticas() {
-
-        const cantidad = visitados.length;
-
-        const porcentaje =
-            ((cantidad / TOTAL_MUNICIPIOS) * 100).toFixed(1);
-
-        document.getElementById("contador").textContent = cantidad;
-
-        document.getElementById("numeroVisitados").textContent =
-            cantidad;
-
-        document.getElementById("numeroPendientes").textContent =
-            TOTAL_MUNICIPIOS - cantidad;
-
-        document.getElementById("porcentaje").textContent =
-            porcentaje + "%";
-
-        document.getElementById("barra").style.width =
-            porcentaje + "%";
-    }
+mapa.setView(
+    [6.5, -75.5],
+    7
+);
 
 
-    // ============================================
-    // GUARDAR
-    // ============================================
+// =====================================================
+// REFERENCIAS
+// =====================================================
 
-    function guardarVisitas() {
+const capasMunicipios = {};
 
-        localStorage.setItem(
-            "municipiosVisitadosAntioquia",
-            JSON.stringify(visitados)
+const datosMunicipios = {};
+
+let capaAntioquia = null;
+
+
+// =====================================================
+// ESTILO
+// =====================================================
+
+function estiloMunicipio(feature) {
+
+    const codigo =
+        String(feature.properties.divipola_mun);
+
+    const visitado =
+        visitados.includes(codigo);
+
+
+    return {
+
+        fillColor:
+            visitado
+                ? "#22c55e"
+                : "#d1d5db",
+
+        weight: 1,
+
+        color: "#555",
+
+        fillOpacity: 0.85
+
+    };
+
+}
+
+
+// =====================================================
+// ESTADÍSTICAS
+// =====================================================
+
+function actualizarEstadisticas() {
+
+    const cantidad =
+        visitados.length;
+
+
+    const porcentaje =
+        (
+            cantidad /
+            TOTAL_MUNICIPIOS *
+            100
+        ).toFixed(1);
+
+
+    document.getElementById(
+        "contador"
+    ).textContent = cantidad;
+
+
+    document.getElementById(
+        "numeroVisitados"
+    ).textContent = cantidad;
+
+
+    document.getElementById(
+        "numeroPendientes"
+    ).textContent =
+        TOTAL_MUNICIPIOS - cantidad;
+
+
+    document.getElementById(
+        "porcentaje"
+    ).textContent =
+        porcentaje + "%";
+
+
+    document.getElementById(
+        "barra"
+    ).style.width =
+        porcentaje + "%";
+
+
+    actualizarLista();
+
+}
+
+
+// =====================================================
+// GUARDAR
+// =====================================================
+
+function guardarVisitas() {
+
+    localStorage.setItem(
+
+        "municipiosVisitadosAntioquia",
+
+        JSON.stringify(visitados)
+
+    );
+
+}
+
+
+// =====================================================
+// CAMBIAR ESTADO
+// =====================================================
+
+function cambiarEstado(
+    codigo,
+    nombre,
+    capa
+) {
+
+    const indice =
+        visitados.indexOf(codigo);
+
+
+    if (indice === -1) {
+
+        visitados.push(codigo);
+
+    } else {
+
+        visitados.splice(
+            indice,
+            1
         );
+
     }
 
 
-    // ============================================
-    // MARCAR MUNICIPIO
-    // ============================================
-
-    function cambiarEstado(codigo, nombre, capa) {
-
-        const indice = visitados.indexOf(codigo);
-
-        if (indice === -1) {
-
-            visitados.push(codigo);
-
-        } else {
-
-            visitados.splice(indice, 1);
-
-        }
-
-        guardarVisitas();
-
-        capa.setStyle(estiloMunicipio);
-
-        actualizarEstadisticas();
-
-        mostrarPopup(capa, codigo, nombre);
-    }
+    guardarVisitas();
 
 
-    // ============================================
-    // POPUP
-    // ============================================
+    capa.setStyle(
+        estiloMunicipio(
+            capa.feature
+        )
+    );
 
-    function mostrarPopup(capa, codigo, nombre) {
 
-        const estaVisitado =
-            visitados.includes(codigo);
+    actualizarEstadisticas();
 
-        const estado = estaVisitado
+
+    mostrarPopup(
+        capa,
+        codigo,
+        nombre
+    );
+
+}
+
+
+// =====================================================
+// POPUP
+// =====================================================
+
+function mostrarPopup(
+    capa,
+    codigo,
+    nombre
+) {
+
+    const visitado =
+        visitados.includes(codigo);
+
+
+    const estado =
+        visitado
             ? "✓ Visitado"
             : "No visitado";
 
-        const claseBoton = estaVisitado
-            ? "boton boton-quitar"
-            : "boton boton-visitar";
 
-        const textoBoton = estaVisitado
+    const clase =
+        visitado
+            ? "popup-boton popup-quitar"
+            : "popup-boton popup-visitar";
+
+
+    const texto =
+        visitado
             ? "Marcar como no visitado"
             : "Marcar como visitado";
 
 
-        const contenido = `
+    const contenido = `
 
-            <div class="nombre-municipio">
-                ${nombre}
+        <div class="nombre-municipio">
+            ${nombre}
+        </div>
+
+        <div class="estado-municipio">
+            ${estado}
+        </div>
+
+        <button
+            class="${clase}"
+            onclick="cambiarDesdePopup('${codigo}')"
+        >
+            ${texto}
+        </button>
+
+    `;
+
+
+    capa
+        .bindPopup(contenido)
+        .openPopup();
+
+}
+
+
+// =====================================================
+// CAMBIAR DESDE POPUP
+// =====================================================
+
+function cambiarDesdePopup(codigo) {
+
+    const capa =
+        capasMunicipios[codigo];
+
+
+    if (!capa) {
+        return;
+    }
+
+
+    const nombre =
+        capa.feature.properties.mpio_nombre;
+
+
+    cambiarEstado(
+        codigo,
+        nombre,
+        capa
+    );
+
+}
+
+
+// =====================================================
+// NORMALIZAR TEXTO
+// =====================================================
+
+function normalizarTexto(texto) {
+
+    return texto
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        );
+
+}
+
+
+// =====================================================
+// BUSCADOR
+// =====================================================
+
+document
+    .getElementById("buscador")
+    .addEventListener(
+        "input",
+        buscarMunicipio
+    );
+
+
+function buscarMunicipio() {
+
+    const texto =
+        normalizarTexto(
+            document.getElementById(
+                "buscador"
+            ).value.trim()
+        );
+
+
+    if (!texto) {
+
+        mostrarTodos();
+
+        return;
+
+    }
+
+
+    const encontrados =
+        Object.values(
+            datosMunicipios
+        ).filter(
+            municipio =>
+                normalizarTexto(
+                    municipio.nombre
+                ).includes(texto)
+        );
+
+
+    actualizarLista(
+        encontrados
+    );
+
+
+    if (
+        encontrados.length === 1
+    ) {
+
+        const municipio =
+            encontrados[0];
+
+
+        mapa.fitBounds(
+            municipio.capa.getBounds(),
+            {
+                padding: [50, 50]
+            }
+        );
+
+
+        mostrarPopup(
+            municipio.capa,
+            municipio.codigo,
+            municipio.nombre
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// LISTA DE MUNICIPIOS
+// =====================================================
+
+function actualizarLista(
+    listaPersonalizada = null
+) {
+
+    const contenedor =
+        document.getElementById(
+            "listaMunicipios"
+        );
+
+
+    contenedor.innerHTML = "";
+
+
+    let lista;
+
+
+    if (
+        listaPersonalizada !== null
+    ) {
+
+        lista =
+            listaPersonalizada;
+
+    } else {
+
+        lista =
+            Object.values(
+                datosMunicipios
+            )
+            .filter(
+                municipio =>
+                    visitados.includes(
+                        municipio.codigo
+                    )
+            )
+            .sort(
+                (a, b) =>
+                    a.nombre.localeCompare(
+                        b.nombre,
+                        "es"
+                    )
+            );
+
+    }
+
+
+    if (
+        lista.length === 0
+    ) {
+
+        contenedor.innerHTML = `
+
+            <div style="
+                color:#64748b;
+                padding:10px;
+            ">
+
+                No hay municipios para mostrar.
+
             </div>
-
-            <div class="estado-municipio">
-                ${estado}
-            </div>
-
-            <button
-                class="${claseBoton}"
-                onclick="cambiarDesdePopup('${codigo}')"
-            >
-                ${textoBoton}
-            </button>
 
         `;
 
-        capa.bindPopup(contenido).openPopup();
+        return;
+
     }
 
 
-    // ============================================
-    // CAMBIO DESDE EL POPUP
-    // ============================================
+    lista.forEach(
+        municipio => {
 
-    function cambiarDesdePopup(codigo) {
+            const elemento =
+                document.createElement(
+                    "div"
+                );
 
-        const capa = capasMunicipios[codigo];
 
-        if (!capa) return;
+            elemento.className =
+                "municipio-lista";
 
-        const nombre =
-            capa.feature.properties.mpio_nombre;
 
-        cambiarEstado(
-            codigo,
-            nombre,
-            capa
+            elemento.textContent =
+                "✓ " +
+                municipio.nombre;
+
+
+            elemento.onclick =
+                function() {
+
+                    mapa.fitBounds(
+                        municipio.capa.getBounds(),
+                        {
+                            padding: [50, 50]
+                        }
+                    );
+
+
+                    mostrarPopup(
+                        municipio.capa,
+                        municipio.codigo,
+                        municipio.nombre
+                    );
+
+                };
+
+
+            contenedor.appendChild(
+                elemento
+            );
+
+        }
+    );
+
+}
+
+
+// =====================================================
+// MOSTRAR SOLO VISITADOS
+// =====================================================
+
+function mostrarVisitados() {
+
+    document.getElementById(
+        "tituloLista"
+    ).textContent =
+        "Mis municipios visitados";
+
+
+    document.getElementById(
+        "buscador"
+    ).value = "";
+
+
+    actualizarLista();
+
+}
+
+
+// =====================================================
+// MOSTRAR TODOS
+// =====================================================
+
+function mostrarTodos() {
+
+    document.getElementById(
+        "tituloLista"
+    ).textContent =
+        "Municipios";
+
+
+    document.getElementById(
+        "buscador"
+    ).value = "";
+
+
+    const todos =
+        Object.values(
+            datosMunicipios
+        ).sort(
+            (a, b) =>
+                a.nombre.localeCompare(
+                    b.nombre,
+                    "es"
+                )
         );
+
+
+    actualizarLista(todos);
+
+}
+
+
+// =====================================================
+// REINICIAR
+// =====================================================
+
+function reiniciarProgreso() {
+
+    const confirmar =
+        confirm(
+            "¿Seguro que quieres borrar todos los municipios visitados?"
+        );
+
+
+    if (!confirmar) {
+        return;
     }
 
 
-    // ============================================
-    // GUARDAR REFERENCIA DE CADA MUNICIPIO
-    // ============================================
-
-    const capasMunicipios = {};
+    visitados = [];
 
 
-    // ============================================
-    // CARGAR GEOJSON
-    // ============================================
+    guardarVisitas();
 
-    fetch(GEOJSON_URL)
 
-        .then(respuesta => {
+    Object.values(
+        capasMunicipios
+    ).forEach(
+        capa => {
+
+            capa.setStyle(
+                estiloMunicipio(
+                    capa.feature
+                )
+            );
+
+        }
+    );
+
+
+    actualizarEstadisticas();
+
+}
+
+
+// =====================================================
+// CARGAR MAPA
+// =====================================================
+
+fetch(GEOJSON_URL)
+
+    .then(
+        respuesta => {
 
             if (!respuesta.ok) {
+
                 throw new Error(
-                    "No se pudo cargar el mapa"
+                    "No se pudo cargar el mapa."
                 );
+
             }
 
             return respuesta.json();
 
-        })
+        }
+    )
 
-        .then(datos => {
+    .then(
+        datos => {
 
-            // Nos quedamos únicamente con Antioquia.
             const antioquia =
-                datos.features.filter(feature =>
-                    feature.properties.divipola_dep === "05"
+                datos.features.filter(
+                    feature => {
+
+                        return String(
+                            feature.properties.divipola_dep
+                        ) === "05";
+
+                    }
                 );
 
 
-            const capa = L.geoJSON(antioquia, {
+            capaAntioquia =
+                L.geoJSON(
+                    antioquia,
+                    {
 
-                style: estiloMunicipio,
-
-                onEachFeature: function(feature, layer) {
-
-                    const codigo =
-                        feature.properties.divipola_mun;
-
-                    const nombre =
-                        feature.properties.mpio_nombre;
-
-                    capasMunicipios[codigo] = layer;
+                        style:
+                            estiloMunicipio,
 
 
-                    layer.on({
+                        onEachFeature:
+                            function(
+                                feature,
+                                layer
+                            ) {
 
-                        mouseover: function(e) {
-
-                            e.target.setStyle({
-                                weight: 2,
-                                color: "#111",
-                                fillOpacity: 0.95
-                            });
-
-                        },
-
-                        mouseout: function(e) {
-
-                            e.target.setStyle(
-                                estiloMunicipio(feature)
-                            );
-
-                        },
-
-                        click: function() {
-
-                            mostrarPopup(
-                                layer,
-                                codigo,
-                                nombre
-                            );
-
-                        }
-
-                    });
-
-                }
-
-            }).addTo(mapa);
+                                const codigo =
+                                    String(
+                                        feature
+                                        .properties
+                                        .divipola_mun
+                                    );
 
 
-            // Ajustar mapa a Antioquia
-            mapa.fitBounds(capa.getBounds());
+                                const nombre =
+                                    feature
+                                    .properties
+                                    .mpio_nombre;
+
+
+                                capasMunicipios[
+                                    codigo
+                                ] = layer;
+
+
+                                datosMunicipios[
+                                    codigo
+                                ] = {
+
+                                    codigo:
+                                        codigo,
+
+                                    nombre:
+                                        nombre,
+
+                                    capa:
+                                        layer
+
+                                };
+
+
+                                // Tooltip
+                                layer.bindTooltip(
+                                    nombre,
+                                    {
+                                        sticky: true,
+                                        direction:
+                                            "top"
+                                    }
+                                );
+
+
+                                layer.on({
+
+                                    mouseover:
+                                        function(e) {
+
+                                            e.target
+                                                .setStyle({
+
+                                                    weight: 2,
+
+                                                    color:
+                                                        "#111",
+
+                                                    fillOpacity:
+                                                        0.95
+
+                                                });
+
+                                        },
+
+
+                                    mouseout:
+                                        function(e) {
+
+                                            e.target
+                                                .setStyle(
+                                                    estiloMunicipio(
+                                                        feature
+                                                    )
+                                                );
+
+                                        },
+
+
+                                    click:
+                                        function() {
+
+                                            mostrarPopup(
+                                                layer,
+                                                codigo,
+                                                nombre
+                                            );
+
+                                        }
+
+                                });
+
+                            }
+
+                    }
+                )
+                .addTo(mapa);
+
+
+            mapa.fitBounds(
+                capaAntioquia.getBounds()
+            );
+
 
             actualizarEstadisticas();
 
-        })
 
-        .catch(error => {
+            mostrarVisitados();
+
+        }
+    )
+
+    .catch(
+        error => {
 
             console.error(error);
 
-            document.getElementById("mapa").innerHTML = `
+
+            document.getElementById(
+                "mapa"
+            ).innerHTML = `
 
                 <div style="
-                    padding:30px;
+                    padding:40px;
                     text-align:center;
                     color:#b91c1c;
                 ">
 
-                    <h3>Error cargando el mapa</h3>
+                    <h3>
+                        Error cargando el mapa
+                    </h3>
 
                     <p>
-                        No se pudo cargar la información
-                        geográfica de los municipios.
-                    </p>
-
-                    <p>
-                        Revisa la consola del navegador.
+                        No se pudo cargar la
+                        información geográfica.
                     </p>
 
                 </div>
 
             `;
 
-        });
+        }
+    );
+
 
 </script>
+
 
 </body>
 </html>
