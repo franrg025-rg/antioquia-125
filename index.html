@@ -12,6 +12,7 @@
   />
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -43,6 +44,10 @@
     .contenedor {
       padding: 15px;
     }
+
+    /* ================================
+       ESTADÍSTICAS
+    ================================= */
 
     .estadisticas {
       display: grid;
@@ -84,6 +89,10 @@
       transition: width 0.3s ease;
     }
 
+    /* ================================
+       CONTROLES
+    ================================= */
+
     .controles {
       display: flex;
       flex-wrap: wrap;
@@ -123,19 +132,40 @@
       font-size: 15px;
     }
 
+    /* ================================
+       CONTENIDO
+    ================================= */
+
     .contenido {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 300px;
       gap: 12px;
     }
 
+    /* ================================
+       MAPA
+    ================================= */
+
     #mapa {
       height: 650px;
-      background: white;
+      background: #eef2f3;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
+
+    /*
+      Evita que Leaflet muestre un fondo
+      extraño fuera de Antioquia.
+    */
+
+    .leaflet-container {
+      background: #eef2f3;
+    }
+
+    /* ================================
+       LISTA
+    ================================= */
 
     .lista {
       background: white;
@@ -176,6 +206,10 @@
       border: 1px solid rgba(0,0,0,0.15);
     }
 
+    /* ================================
+       LEYENDA
+    ================================= */
+
     .leyenda {
       background: white;
       padding: 10px 12px;
@@ -194,7 +228,9 @@
       border-radius: 3px;
     }
 
-    /* PANEL LATERAL */
+    /* ================================
+       PANEL LATERAL
+    ================================= */
 
     .overlay {
       display: none;
@@ -243,6 +279,10 @@
       padding: 7px 11px;
     }
 
+    /* ================================
+       ESTADO
+    ================================= */
+
     .estado {
       padding: 10px;
       border-radius: 8px;
@@ -259,6 +299,10 @@
       background: #f3f4f6;
       color: #4b5563;
     }
+
+    /* ================================
+       CAMPOS
+    ================================= */
 
     .campo {
       margin-bottom: 15px;
@@ -286,14 +330,9 @@
       resize: vertical;
     }
 
-    .acciones {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    /* SELECTOR DE COLOR INDIVIDUAL */
+    /* ================================
+       SELECTOR DE COLOR
+    ================================= */
 
     .selector-color-ficha {
       display: flex;
@@ -328,7 +367,23 @@
       margin-top: 7px;
     }
 
+    /* ================================
+       ACCIONES
+    ================================= */
+
+    .acciones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    /* ================================
+       RESPONSIVE
+    ================================= */
+
     @media (max-width: 900px) {
+
       .contenido {
         grid-template-columns: 1fr;
       }
@@ -341,9 +396,11 @@
       #mapa {
         height: 550px;
       }
+
     }
 
     @media (max-width: 600px) {
+
       .estadisticas {
         grid-template-columns: 1fr;
       }
@@ -356,59 +413,129 @@
       #mapa {
         height: 500px;
       }
+
     }
+
   </style>
 </head>
 
 <body>
 
 <header>
-  <h1>Antioquia - 125 Municipios</h1>
-  <p>Mapa personal de municipios visitados</p>
+
+  <h1>
+    Antioquia - 125 Municipios
+  </h1>
+
+  <p>
+    Mapa personal de municipios visitados
+  </p>
+
 </header>
 
+
 <div class="contenedor">
+
+  <!-- =====================================
+       ESTADÍSTICAS
+  ====================================== -->
 
   <div class="estadisticas">
 
     <div class="tarjeta">
-      <div class="tarjeta-titulo">Municipios visitados</div>
+
+      <div class="tarjeta-titulo">
+        Municipios visitados
+      </div>
+
       <div class="tarjeta-valor">
         <span id="contadorVisitados">0</span> / 125
       </div>
+
     </div>
 
+
     <div class="tarjeta">
-      <div class="tarjeta-titulo">Porcentaje completado</div>
+
+      <div class="tarjeta-titulo">
+        Porcentaje completado
+      </div>
+
       <div class="tarjeta-valor">
-        <span id="porcentaje">0</span>%
+
+        <span id="porcentaje">
+          0
+        </span>%
+
       </div>
 
       <div class="barra-contenedor">
-        <div class="barra" id="barraProgreso"></div>
+
+        <div
+          class="barra"
+          id="barraProgreso">
+        </div>
+
       </div>
+
     </div>
+
 
     <div class="tarjeta">
-      <div class="tarjeta-titulo">Pendientes</div>
-      <div class="tarjeta-valor" id="contadorPendientes">125</div>
+
+      <div class="tarjeta-titulo">
+        Pendientes
+      </div>
+
+      <div
+        class="tarjeta-valor"
+        id="contadorPendientes">
+        125
+      </div>
+
     </div>
 
   </div>
 
+
+  <!-- =====================================
+       BOTONES
+  ====================================== -->
+
   <div class="controles">
-    <button class="btn-principal" onclick="mostrarVisitados()">
+
+    <button
+      class="btn-principal"
+      onclick="mostrarVisitados()">
+
       Mis municipios
+
     </button>
 
-    <button class="btn-secundario" onclick="mostrarTodos()">
+
+    <button
+      class="btn-secundario"
+      onclick="mostrarTodos()">
+
       Mostrar todos
+
     </button>
 
-    <button class="btn-peligro" onclick="reiniciarProgreso()">
+
+    <button
+      class="btn-peligro"
+      onclick="reiniciarProgreso()">
+
       Reiniciar
+
     </button>
+
   </div>
+
+
+  <!-- =====================================
+       BUSCADOR
+  ====================================== -->
 
   <input
     type="text"
@@ -418,24 +545,50 @@
     oninput="buscarMunicipio()"
   >
 
+
+  <!-- =====================================
+       MAPA + LISTA
+  ====================================== -->
+
   <div class="contenido">
 
     <div id="mapa"></div>
 
+
     <div class="lista">
-      <h3>Municipios</h3>
+
+      <h3>
+        Municipios
+      </h3>
+
       <div id="listaMunicipios"></div>
+
     </div>
 
   </div>
 
 </div>
 
-<!-- PANEL -->
 
-<div id="overlay" class="overlay" onclick="cerrarFicha()"></div>
+<!-- =====================================
+     FONDO DEL PANEL
+====================================== -->
 
-<div id="panel" class="panel">
+<div
+  id="overlay"
+  class="overlay"
+  onclick="cerrarFicha()">
+</div>
+
+
+<!-- =====================================
+     PANEL DE MUNICIPIO
+====================================== -->
+
+<div
+  id="panel"
+  class="panel">
+
 
   <div class="panel-cabecera">
 
@@ -443,15 +596,29 @@
       Municipio
     </h2>
 
-    <button class="cerrar" onclick="cerrarFicha()">
+    <button
+      class="cerrar"
+      onclick="cerrarFicha()">
+
       ×
+
     </button>
 
   </div>
 
-  <div id="estadoFicha" class="estado estado-no-visitado">
+
+  <!-- ESTADO -->
+
+  <div
+    id="estadoFicha"
+    class="estado estado-no-visitado">
+
     No visitado
+
   </div>
+
+
+  <!-- COLOR -->
 
   <div class="campo">
 
@@ -459,79 +626,95 @@
       Color de este municipio
     </label>
 
+
     <div class="selector-color-ficha">
+
 
       <button
         class="color-opcion-ficha"
         style="background:#22c55e"
         data-color="#22c55e"
         onclick="seleccionarColorMunicipio('#22c55e')"
-        title="Verde"
-      ></button>
+        title="Verde">
+      </button>
+
 
       <button
         class="color-opcion-ficha"
         style="background:#3b82f6"
         data-color="#3b82f6"
         onclick="seleccionarColorMunicipio('#3b82f6')"
-        title="Azul"
-      ></button>
+        title="Azul">
+      </button>
+
 
       <button
         class="color-opcion-ficha"
         style="background:#8b5cf6"
         data-color="#8b5cf6"
         onclick="seleccionarColorMunicipio('#8b5cf6')"
-        title="Morado"
-      ></button>
+        title="Morado">
+      </button>
+
 
       <button
         class="color-opcion-ficha"
         style="background:#f97316"
         data-color="#f97316"
         onclick="seleccionarColorMunicipio('#f97316')"
-        title="Naranja"
-      ></button>
+        title="Naranja">
+      </button>
+
 
       <button
         class="color-opcion-ficha"
         style="background:#ef4444"
         data-color="#ef4444"
         onclick="seleccionarColorMunicipio('#ef4444')"
-        title="Rojo"
-      ></button>
+        title="Rojo">
+      </button>
+
 
       <button
         class="color-opcion-ficha"
         style="background:#14b8a6"
         data-color="#14b8a6"
         onclick="seleccionarColorMunicipio('#14b8a6')"
-        title="Turquesa"
-      ></button>
+        title="Turquesa">
+      </button>
+
 
       <button
         class="color-opcion-ficha"
         style="background:#eab308"
         data-color="#eab308"
         onclick="seleccionarColorMunicipio('#eab308')"
-        title="Amarillo"
-      ></button>
+        title="Amarillo">
+      </button>
+
 
       <button
         class="color-opcion-ficha"
         style="background:#ec4899"
         data-color="#ec4899"
         onclick="seleccionarColorMunicipio('#ec4899')"
-        title="Rosado"
-      ></button>
+        title="Rosado">
+      </button>
+
 
     </div>
 
+
     <div class="mensaje-color">
+
       Este color se aplica únicamente a este municipio.
+
     </div>
 
   </div>
+
+
+  <!-- FECHA -->
 
   <div class="campo">
 
@@ -546,10 +729,15 @@
 
   </div>
 
+
+  <!-- LUGARES -->
+
   <div class="campo">
 
     <label for="lugaresVisitados">
+
       Lugares que viste o visitaste
+
     </label>
 
     <textarea
@@ -559,10 +747,15 @@
 
   </div>
 
+
+  <!-- NOTAS -->
+
   <div class="campo">
 
     <label for="notasMunicipio">
+
       Mis notas
+
     </label>
 
     <textarea
@@ -572,47 +765,62 @@
 
   </div>
 
+
+  <!-- BOTONES -->
+
   <div class="acciones">
 
     <button
       class="btn-principal"
-      onclick="guardarFicha()"
-    >
+      onclick="guardarFicha()">
+
       Guardar información
+
     </button>
+
 
     <button
       class="btn-secundario"
-      onclick="marcarDesdeFicha()"
-    >
+      onclick="marcarDesdeFicha()">
+
       Marcar visitado
+
     </button>
+
 
     <button
       class="btn-secundario"
-      onclick="desmarcarDesdeFicha()"
-    >
+      onclick="desmarcarDesdeFicha()">
+
       Marcar no visitado
+
     </button>
+
 
     <button
       class="btn-peligro"
-      onclick="eliminarDatosFicha()"
-    >
+      onclick="eliminarDatosFicha()">
+
       Eliminar información
+
     </button>
 
   </div>
 
+
 </div>
+
+
+<!-- LEAFLET -->
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+
 <script>
 
-  /* ==========================================
+  /* =====================================================
      CONFIGURACIÓN
-  ========================================== */
+  ===================================================== */
 
   const TOTAL_MUNICIPIOS = 125;
 
@@ -626,19 +834,25 @@
     "#22c55e";
 
 
-  /* ==========================================
+  /* =====================================================
      VARIABLES
-  ========================================== */
+  ===================================================== */
 
   let visitados =
     JSON.parse(
-      localStorage.getItem(STORAGE_VISITADOS) || "[]"
+      localStorage.getItem(
+        STORAGE_VISITADOS
+      ) || "[]"
     );
+
 
   let informacionMunicipios =
     JSON.parse(
-      localStorage.getItem(STORAGE_INFORMACION) || "{}"
+      localStorage.getItem(
+        STORAGE_INFORMACION
+      ) || "{}"
     );
+
 
   let municipiosGeoJSON = [];
 
@@ -649,45 +863,74 @@
   let mostrarSoloVisitados = false;
 
 
-  /* ==========================================
+  /* =====================================================
      MAPA
-  ========================================== */
+  ===================================================== */
 
-  const mapa = L.map("mapa").setView(
-    [7.0, -75.5],
+  /*
+    IMPORTANTE:
+
+    No utilizamos tileLayer.
+
+    Por lo tanto NO aparecen:
+    - carreteras
+    - ciudades
+    - países
+    - nombres externos
+    - mapa mundial
+
+    El fondo será completamente limpio.
+  */
+
+  const mapa = L.map(
+    "mapa",
+    {
+
+      minZoom: 8,
+
+      maxZoom: 12,
+
+      zoomControl: true,
+
+      maxBoundsViscosity: 1.0
+
+    }
+  ).setView(
+    [6.7, -75.5],
     8
   );
 
-  L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-      attribution:
-        '&copy; OpenStreetMap contributors'
-    }
-  ).addTo(mapa);
 
-
-  /* ==========================================
-     ESTILO DE MUNICIPIO
-  ========================================== */
+  /* =====================================================
+     ESTILO MUNICIPIOS
+  ===================================================== */
 
   function estiloMunicipio(feature) {
 
     const codigo =
-      String(feature.properties.divipola_mun);
+      String(
+        feature.properties.divipola_mun
+      );
+
 
     const visitado =
       visitados.includes(codigo);
 
-    const info =
-      informacionMunicipios[codigo] || {};
 
-    let color =
-      info.color || COLOR_DEFAULT;
+    const info =
+      informacionMunicipios[codigo]
+      || {};
+
+
+    const color =
+      info.color
+      || COLOR_DEFAULT;
+
 
     return {
 
       fillColor:
+
         visitado
           ? color
           : "#d1d5db",
@@ -699,144 +942,193 @@
         1,
 
       fillOpacity:
+
         visitado
           ? 0.72
-          : 0.55
+          : 0.60
 
     };
 
   }
 
 
-  /* ==========================================
-     HOVER
-  ========================================== */
+  /* =====================================================
+     EVENTOS MUNICIPIO
+  ===================================================== */
 
-  function eventosMunicipio(feature, layer) {
+  function eventosMunicipio(
+    feature,
+    layer
+  ) {
+
 
     layer.on({
 
-      mouseover: function(e) {
+      mouseover:
+        function(e) {
 
-        e.target.setStyle({
+          e.target.setStyle({
 
-          weight: 3,
+            weight: 3,
 
-          color: "#111827",
+            color: "#111827",
 
-          fillOpacity: 0.85
+            fillOpacity: 0.85
 
-        });
+          });
 
-        e.target.bringToFront();
 
-      },
+          e.target.bringToFront();
 
-      mouseout: function(e) {
+        },
 
-        const codigo =
-          String(feature.properties.divipola_mun);
 
-        const visitado =
-          visitados.includes(codigo);
+      mouseout:
+        function(e) {
 
-        const info =
-          informacionMunicipios[codigo] || {};
+          const codigo =
+            String(
+              feature.properties.divipola_mun
+            );
 
-        e.target.setStyle({
 
-          fillColor:
-            visitado
-              ? (info.color || COLOR_DEFAULT)
-              : "#d1d5db",
+          const visitado =
+            visitados.includes(
+              codigo
+            );
 
-          color:
-            "#ffffff",
 
-          weight:
-            1,
+          const info =
+            informacionMunicipios[codigo]
+            || {};
 
-          fillOpacity:
-            visitado
-              ? 0.72
-              : 0.55
 
-        });
+          e.target.setStyle({
 
-      },
+            fillColor:
 
-      click: function() {
+              visitado
+                ? (
+                    info.color
+                    || COLOR_DEFAULT
+                  )
+                : "#d1d5db",
 
-        abrirFicha(feature);
+            color:
+              "#ffffff",
 
-      }
+            weight:
+              1,
+
+            fillOpacity:
+
+              visitado
+                ? 0.72
+                : 0.60
+
+          });
+
+        },
+
+
+      click:
+        function() {
+
+          abrirFicha(feature);
+
+        }
 
     });
 
+
     layer.bindTooltip(
+
       feature.properties.mpio_nombre,
+
       {
         sticky: true
       }
+
     );
 
   }
 
 
-  /* ==========================================
+  /* =====================================================
      GUARDAR VISITADOS
-  ========================================== */
+  ===================================================== */
 
   function guardarVisitas() {
 
     localStorage.setItem(
+
       STORAGE_VISITADOS,
-      JSON.stringify(visitados)
+
+      JSON.stringify(
+        visitados
+      )
+
     );
 
   }
 
 
-  /* ==========================================
+  /* =====================================================
      GUARDAR INFORMACIÓN
-  ========================================== */
+  ===================================================== */
 
   function guardarInformacion() {
 
     localStorage.setItem(
+
       STORAGE_INFORMACION,
-      JSON.stringify(informacionMunicipios)
+
+      JSON.stringify(
+        informacionMunicipios
+      )
+
     );
 
   }
 
 
-  /* ==========================================
+  /* =====================================================
      ACTUALIZAR MAPA
-  ========================================== */
+  ===================================================== */
 
   function actualizarMapa() {
 
     capasMunicipios.forEach(
+
       function(capa) {
+
 
         const codigo =
           String(
             capa.feature.properties.divipola_mun
           );
 
+
         const visitado =
-          visitados.includes(codigo);
+          visitados.includes(
+            codigo
+          );
+
 
         const info =
-          informacionMunicipios[codigo] || {};
+          informacionMunicipios[codigo]
+          || {};
+
 
         const color =
-          info.color || COLOR_DEFAULT;
+          info.color
+          || COLOR_DEFAULT;
+
 
         capa.setStyle({
 
           fillColor:
+
             visitado
               ? color
               : "#d1d5db",
@@ -848,46 +1140,67 @@
             1,
 
           fillOpacity:
+
             visitado
               ? 0.72
-              : 0.55
+              : 0.60
 
         });
 
       }
+
     );
 
   }
 
 
-  /* ==========================================
+  /* =====================================================
      ESTADÍSTICAS
-  ========================================== */
+  ===================================================== */
 
   function actualizarEstadisticas() {
 
     const cantidad =
       visitados.length;
 
+
     const porcentaje =
       Math.round(
-        (cantidad / TOTAL_MUNICIPIOS) * 100
+
+        (
+          cantidad
+          /
+          TOTAL_MUNICIPIOS
+        )
+        *
+        100
+
       );
 
+
     const pendientes =
-      TOTAL_MUNICIPIOS - cantidad;
+      TOTAL_MUNICIPIOS
+      -
+      cantidad;
+
 
     document.getElementById(
       "contadorVisitados"
-    ).textContent = cantidad;
+    ).textContent =
+      cantidad;
+
 
     document.getElementById(
       "porcentaje"
-    ).textContent = porcentaje;
+    ).textContent =
+      porcentaje;
+
 
     document.getElementById(
       "contadorPendientes"
-    ).textContent = pendientes;
+    ).textContent =
+      pendientes;
+
 
     document.getElementById(
       "barraProgreso"
@@ -897,26 +1210,33 @@
   }
 
 
-  /* ==========================================
-     MARCAR VISITADO
-  ========================================== */
+  /* =====================================================
+     MARCAR MUNICIPIO
+  ===================================================== */
 
   function marcarMunicipio(codigo) {
 
     codigo =
       String(codigo);
 
-    if (!visitados.includes(codigo)) {
+
+    if (
+      !visitados.includes(codigo)
+    ) {
 
       visitados.push(codigo);
 
     }
 
-    if (!informacionMunicipios[codigo]) {
+
+    if (
+      !informacionMunicipios[codigo]
+    ) {
 
       informacionMunicipios[codigo] = {};
 
     }
+
 
     if (
       !informacionMunicipios[codigo].color
@@ -927,6 +1247,7 @@
 
     }
 
+
     guardarVisitas();
 
     guardarInformacion();
@@ -940,23 +1261,27 @@
   }
 
 
-  /* ==========================================
-     DESMARCAR VISITADO
-  ========================================== */
+  /* =====================================================
+     DESMARCAR MUNICIPIO
+  ===================================================== */
 
   function desmarcarMunicipio(codigo) {
 
     codigo =
       String(codigo);
 
+
     visitados =
       visitados.filter(
+
         function(item) {
 
           return item !== codigo;
 
         }
+
       );
+
 
     guardarVisitas();
 
@@ -969,9 +1294,9 @@
   }
 
 
-  /* ==========================================
+  /* =====================================================
      MARCAR DESDE FICHA
-  ========================================== */
+  ===================================================== */
 
   function marcarDesdeFicha() {
 
@@ -979,21 +1304,28 @@
       return;
     }
 
+
     const codigo =
       String(
-        municipioActual.properties.divipola_mun
+        municipioActual
+          .properties
+          .divipola_mun
       );
 
-    marcarMunicipio(codigo);
+
+    marcarMunicipio(
+      codigo
+    );
+
 
     actualizarEstadoFicha();
 
   }
 
 
-  /* ==========================================
+  /* =====================================================
      DESMARCAR DESDE FICHA
-  ========================================== */
+  ===================================================== */
 
   function desmarcarDesdeFicha() {
 
@@ -1001,86 +1333,121 @@
       return;
     }
 
+
     const codigo =
       String(
-        municipioActual.properties.divipola_mun
+        municipioActual
+          .properties
+          .divipola_mun
       );
 
-    desmarcarMunicipio(codigo);
+
+    desmarcarMunicipio(
+      codigo
+    );
+
 
     actualizarEstadoFicha();
 
   }
 
 
-  /* ==========================================
+  /* =====================================================
      ABRIR FICHA
-  ========================================== */
+  ===================================================== */
 
   function abrirFicha(feature) {
 
     municipioActual =
       feature;
 
+
     const codigo =
       String(
-        feature.properties.divipola_mun
+        feature
+          .properties
+          .divipola_mun
       );
 
+
     const nombre =
-      feature.properties.mpio_nombre;
+      feature
+        .properties
+        .mpio_nombre;
+
 
     document.getElementById(
       "nombreMunicipio"
     ).textContent =
       nombre;
 
+
     const info =
-      informacionMunicipios[codigo] || {};
+      informacionMunicipios[codigo]
+      || {};
+
 
     document.getElementById(
       "fechaVisita"
     ).value =
-      info.fecha || "";
+      info.fecha
+      || "";
+
 
     document.getElementById(
       "lugaresVisitados"
     ).value =
-      info.lugares || "";
+      info.lugares
+      || "";
+
 
     document.getElementById(
       "notasMunicipio"
     ).value =
-      info.notas || "";
+      info.notas
+      || "";
+
 
     actualizarEstadoFicha();
 
+
     actualizarSeleccionColorFicha(
-      info.color || COLOR_DEFAULT
+
+      info.color
+      ||
+      COLOR_DEFAULT
+
     );
+
 
     document.getElementById(
       "overlay"
     ).style.display =
       "block";
 
+
     setTimeout(
+
       function() {
 
         document.getElementById(
           "panel"
-        ).classList.add("abierto");
+        ).classList.add(
+          "abierto"
+        );
 
       },
+
       10
+
     );
 
   }
 
 
-  /* ==========================================
-     ACTUALIZAR ESTADO DE FICHA
-  ========================================== */
+  /* =====================================================
+     ESTADO DE FICHA
+  ===================================================== */
 
   function actualizarEstadoFicha() {
 
@@ -1088,28 +1455,42 @@
       return;
     }
 
+
     const codigo =
       String(
-        municipioActual.properties.divipola_mun
+        municipioActual
+          .properties
+          .divipola_mun
       );
+
 
     const estado =
       document.getElementById(
         "estadoFicha"
       );
 
-    if (visitados.includes(codigo)) {
+
+    if (
+      visitados.includes(
+        codigo
+      )
+    ) {
+
 
       estado.textContent =
         "✓ Municipio visitado";
 
+
       estado.className =
         "estado estado-visitado";
 
+
     } else {
+
 
       estado.textContent =
         "No visitado";
+
 
       estado.className =
         "estado estado-no-visitado";
@@ -1119,46 +1500,62 @@
   }
 
 
-  /* ==========================================
-     SELECCIONAR COLOR INDIVIDUAL
-  ========================================== */
+  /* =====================================================
+     COLOR INDIVIDUAL
+  ===================================================== */
 
-  function seleccionarColorMunicipio(color) {
+  function seleccionarColorMunicipio(
+    color
+  ) {
 
     if (!municipioActual) {
       return;
     }
 
+
     const codigo =
       String(
-        municipioActual.properties.divipola_mun
+        municipioActual
+          .properties
+          .divipola_mun
       );
 
-    if (!informacionMunicipios[codigo]) {
+
+    if (
+      !informacionMunicipios[codigo]
+    ) {
 
       informacionMunicipios[codigo] = {};
 
     }
 
+
     informacionMunicipios[codigo].color =
       color;
 
+
     /*
-      Si escoges un color,
-      automáticamente se marca como visitado.
+      Seleccionar un color
+      automáticamente marca
+      el municipio como visitado.
     */
 
-    if (!visitados.includes(codigo)) {
+    if (
+      !visitados.includes(codigo)
+    ) {
 
       visitados.push(codigo);
 
-      guardarVisitas();
-
     }
+
+
+    guardarVisitas();
 
     guardarInformacion();
 
-    actualizarSeleccionColorFicha(color);
+    actualizarSeleccionColorFicha(
+      color
+    );
 
     actualizarMapa();
 
@@ -1171,26 +1568,34 @@
   }
 
 
-  /* ==========================================
-     ACTUALIZAR COLOR SELECCIONADO
-  ========================================== */
+  /* =====================================================
+     COLOR SELECCIONADO
+  ===================================================== */
 
-  function actualizarSeleccionColorFicha(color) {
+  function actualizarSeleccionColorFicha(
+    color
+  ) {
 
     const botones =
       document.querySelectorAll(
         ".color-opcion-ficha"
       );
 
+
     botones.forEach(
+
       function(boton) {
+
 
         const colorBoton =
           boton.getAttribute(
             "data-color"
           );
 
-        if (colorBoton === color) {
+
+        if (
+          colorBoton === color
+        ) {
 
           boton.classList.add(
             "seleccionado"
@@ -1205,14 +1610,15 @@
         }
 
       }
+
     );
 
   }
 
 
-  /* ==========================================
+  /* =====================================================
      GUARDAR FICHA
-  ========================================== */
+  ===================================================== */
 
   function guardarFicha() {
 
@@ -1220,37 +1626,51 @@
       return;
     }
 
+
     const codigo =
       String(
-        municipioActual.properties.divipola_mun
+        municipioActual
+          .properties
+          .divipola_mun
       );
 
-    const nombre =
-      municipioActual.properties.mpio_nombre;
 
-    if (!informacionMunicipios[codigo]) {
+    const nombre =
+      municipioActual
+        .properties
+        .mpio_nombre;
+
+
+    if (
+      !informacionMunicipios[codigo]
+    ) {
 
       informacionMunicipios[codigo] = {};
 
     }
 
+
     informacionMunicipios[codigo].nombre =
       nombre;
+
 
     informacionMunicipios[codigo].fecha =
       document.getElementById(
         "fechaVisita"
       ).value;
 
+
     informacionMunicipios[codigo].lugares =
       document.getElementById(
         "lugaresVisitados"
       ).value;
 
+
     informacionMunicipios[codigo].notas =
       document.getElementById(
         "notasMunicipio"
       ).value;
+
 
     if (
       !informacionMunicipios[codigo].color
@@ -1261,16 +1681,21 @@
 
     }
 
+
     /*
-      Si guardamos información,
-      automáticamente se considera visitado.
+      Guardar información
+      automáticamente marca
+      el municipio como visitado.
     */
 
-    if (!visitados.includes(codigo)) {
+    if (
+      !visitados.includes(codigo)
+    ) {
 
       visitados.push(codigo);
 
     }
+
 
     guardarVisitas();
 
@@ -1284,9 +1709,14 @@
 
     actualizarEstadoFicha();
 
+
     actualizarSeleccionColorFicha(
-      informacionMunicipios[codigo].color
+
+      informacionMunicipios[codigo]
+        .color
+
     );
+
 
     alert(
       "Información guardada correctamente."
@@ -1295,9 +1725,9 @@
   }
 
 
-  /* ==========================================
+  /* =====================================================
      ELIMINAR INFORMACIÓN
-  ========================================== */
+  ===================================================== */
 
   function eliminarDatosFicha() {
 
@@ -1305,39 +1735,55 @@
       return;
     }
 
+
     const codigo =
       String(
-        municipioActual.properties.divipola_mun
+        municipioActual
+          .properties
+          .divipola_mun
       );
+
 
     const confirmar =
       confirm(
+
         "¿Quieres eliminar toda la información guardada de este municipio?"
+
       );
+
 
     if (!confirmar) {
       return;
     }
 
-    delete informacionMunicipios[codigo];
+
+    delete informacionMunicipios[
+      codigo
+    ];
+
 
     guardarInformacion();
+
 
     actualizarMapa();
 
     actualizarLista();
 
+
     document.getElementById(
       "fechaVisita"
     ).value = "";
+
 
     document.getElementById(
       "lugaresVisitados"
     ).value = "";
 
+
     document.getElementById(
       "notasMunicipio"
     ).value = "";
+
 
     actualizarSeleccionColorFicha(
       COLOR_DEFAULT
@@ -1346,17 +1792,21 @@
   }
 
 
-  /* ==========================================
+  /* =====================================================
      CERRAR FICHA
-  ========================================== */
+  ===================================================== */
 
   function cerrarFicha() {
 
     document.getElementById(
       "panel"
-    ).classList.remove("abierto");
+    ).classList.remove(
+      "abierto"
+    );
+
 
     setTimeout(
+
       function() {
 
         document.getElementById(
@@ -1365,8 +1815,11 @@
           "none";
 
       },
+
       250
+
     );
+
 
     municipioActual =
       null;
@@ -1374,88 +1827,127 @@
   }
 
 
-  /* ==========================================
+  /* =====================================================
      NORMALIZAR TEXTO
-  ========================================== */
+  ===================================================== */
 
-  function normalizarTexto(texto) {
+  function normalizarTexto(
+    texto
+  ) {
 
     return texto
+
       .normalize("NFD")
+
       .replace(
         /[\u0300-\u036f]/g,
         ""
       )
+
       .toLowerCase();
 
   }
 
 
-  /* ==========================================
-     BUSCADOR
-  ========================================== */
+  /* =====================================================
+     BUSCAR MUNICIPIO
+  ===================================================== */
 
   function buscarMunicipio() {
 
     const texto =
       normalizarTexto(
+
         document.getElementById(
           "buscador"
         ).value.trim()
+
       );
 
+
     capasMunicipios.forEach(
+
       function(capa) {
+
 
         const nombre =
           normalizarTexto(
-            capa.feature.properties.mpio_nombre
+
+            capa.feature
+              .properties
+              .mpio_nombre
+
           );
+
 
         const codigo =
           String(
-            capa.feature.properties.divipola_mun
+
+            capa.feature
+              .properties
+              .divipola_mun
+
           );
 
+
         const visitado =
-          visitados.includes(codigo);
+          visitados.includes(
+            codigo
+          );
+
 
         let visible =
-          nombre.includes(texto);
+          nombre.includes(
+            texto
+          );
 
-        if (mostrarSoloVisitados) {
+
+        if (
+          mostrarSoloVisitados
+        ) {
 
           visible =
-            visible && visitado;
+            visible &&
+            visitado;
 
         }
+
 
         if (visible) {
 
           capa.setStyle({
+
             opacity: 1,
+
             fillOpacity:
-              visitado ? 0.72 : 0.55
+              visitado
+                ? 0.72
+                : 0.60
+
           });
 
         } else {
 
           capa.setStyle({
+
             opacity: 0.15,
+
             fillOpacity: 0.05
+
           });
 
         }
 
       }
+
     );
 
   }
 
 
-  /* ==========================================
-     LISTA DE MUNICIPIOS
-  ========================================== */
+  /* =====================================================
+     ACTUALIZAR LISTA
+  ===================================================== */
 
   function actualizarLista() {
 
@@ -1464,66 +1956,102 @@
         "listaMunicipios"
       );
 
-    contenedor.innerHTML = "";
+
+    contenedor.innerHTML =
+      "";
+
 
     const municipiosOrdenados =
       [...municipiosGeoJSON].sort(
-        function(a, b) {
+
+        function(a,b) {
 
           return a.properties.mpio_nombre
             .localeCompare(
+
               b.properties.mpio_nombre,
+
               "es"
+
             );
 
         }
+
       );
 
+
     municipiosOrdenados.forEach(
+
       function(feature) {
+
 
         const codigo =
           String(
-            feature.properties.divipola_mun
+
+            feature.properties
+              .divipola_mun
+
           );
 
+
         const nombre =
-          feature.properties.mpio_nombre;
+          feature.properties
+            .mpio_nombre;
+
 
         const visitado =
-          visitados.includes(codigo);
+          visitados.includes(
+            codigo
+          );
+
 
         if (
-          mostrarSoloVisitados &&
+
+          mostrarSoloVisitados
+          &&
           !visitado
+
         ) {
 
           return;
 
         }
 
+
         const info =
-          informacionMunicipios[codigo] || {};
+          informacionMunicipios[codigo]
+          || {};
+
 
         const color =
-          info.color || COLOR_DEFAULT;
+          info.color
+          || COLOR_DEFAULT;
+
 
         const elemento =
-          document.createElement("div");
+          document.createElement(
+            "div"
+          );
+
 
         elemento.className =
-          "municipio-lista" +
+          "municipio-lista"
+          +
           (
             visitado
               ? " visitado"
               : ""
           );
 
+
         elemento.innerHTML =
 
           '<span class="punto-color" ' +
+
           'style="background:' +
+
           color +
+
           '"></span>' +
 
           nombre +
@@ -1534,53 +2062,76 @@
               : ""
           );
 
+
         elemento.onclick =
           function() {
 
-            abrirFicha(feature);
+
+            abrirFicha(
+              feature
+            );
+
 
             const capa =
               capasMunicipios.find(
+
                 function(c) {
 
                   return String(
-                    c.feature.properties.divipola_mun
-                  ) === codigo;
+
+                    c.feature
+                      .properties
+                      .divipola_mun
+
+                  )
+                  ===
+                  codigo;
 
                 }
+
               );
+
 
             if (capa) {
 
               mapa.fitBounds(
+
                 capa.getBounds(),
+
                 {
-                  padding: [30, 30]
+                  padding: [
+                    30,
+                    30
+                  ]
                 }
+
               );
 
             }
 
           };
 
+
         contenedor.appendChild(
           elemento
         );
 
       }
+
     );
 
   }
 
 
-  /* ==========================================
+  /* =====================================================
      MOSTRAR VISITADOS
-  ========================================== */
+  ===================================================== */
 
   function mostrarVisitados() {
 
     mostrarSoloVisitados =
       true;
+
 
     actualizarLista();
 
@@ -1589,48 +2140,68 @@
   }
 
 
-  /* ==========================================
+  /* =====================================================
      MOSTRAR TODOS
-  ========================================== */
+  ===================================================== */
 
   function mostrarTodos() {
 
     mostrarSoloVisitados =
       false;
 
+
     actualizarLista();
+
 
     document.getElementById(
       "buscador"
-    ).value = "";
+    ).value =
+      "";
+
 
     capasMunicipios.forEach(
+
       function(capa) {
+
 
         const codigo =
           String(
-            capa.feature.properties.divipola_mun
+
+            capa.feature
+              .properties
+              .divipola_mun
+
           );
 
+
         const visitado =
-          visitados.includes(codigo);
+          visitados.includes(
+            codigo
+          );
+
 
         const info =
-          informacionMunicipios[codigo] || {};
+          informacionMunicipios[codigo]
+          || {};
+
 
         capa.setStyle({
 
-          opacity: 1,
+          opacity:
+            1,
 
           fillOpacity:
+
             visitado
               ? 0.72
-              : 0.55,
+              : 0.60,
 
           fillColor:
+
             visitado
               ? (
-                  info.color ||
+                  info.color
+                  ||
                   COLOR_DEFAULT
                 )
               : "#d1d5db"
@@ -1638,29 +2209,37 @@
         });
 
       }
+
     );
 
   }
 
 
-  /* ==========================================
-     REINICIAR
-  ========================================== */
+  /* =====================================================
+     REINICIAR TODO
+  ===================================================== */
 
   function reiniciarProgreso() {
 
     const confirmar =
       confirm(
+
         "¿Seguro que quieres borrar todos los municipios visitados y toda la información guardada?"
+
       );
+
 
     if (!confirmar) {
       return;
     }
 
+
     visitados = [];
 
-    informacionMunicipios = {};
+
+    informacionMunicipios =
+      {};
+
 
     guardarVisitas();
 
@@ -1677,55 +2256,106 @@
   }
 
 
-  /* ==========================================
-     CARGAR GEOJSON
-  ========================================== */
+  /* =====================================================
+     CARGAR GEOJSON DE ANTIOQUIA
+  ===================================================== */
 
   fetch(
+
     "https://raw.githubusercontent.com/ytolosa/mapas-colombia/main/output/geojson/col_municipios_real_nacional.geojson"
+
   )
 
+
   .then(
+
     function(respuesta) {
+
+      if (!respuesta.ok) {
+
+        throw new Error(
+          "No se pudo cargar el GeoJSON"
+        );
+
+      }
 
       return respuesta.json();
 
     }
+
   )
 
+
   .then(
+
     function(data) {
+
+
+      /*
+        Filtrar únicamente
+        el departamento de Antioquia.
+
+        Código DIVIPOLA:
+        05
+      */
 
       municipiosGeoJSON =
         data.features.filter(
+
           function(feature) {
 
             return String(
-              feature.properties.divipola_dep
-            ) === "05";
+
+              feature.properties
+                .divipola_dep
+
+            )
+            ===
+            "05";
 
           }
+
         );
 
+
+      console.log(
+
+        "Municipios de Antioquia cargados:",
+
+        municipiosGeoJSON.length
+
+      );
+
+
       /*
-        Crear mapa
+        Crear GeoJSON
       */
 
       const geojson =
         L.geoJSON(
+
           {
-            type: "FeatureCollection",
+
+            type:
+              "FeatureCollection",
+
             features:
               municipiosGeoJSON
+
           },
+
           {
+
             style:
               estiloMunicipio,
 
             onEachFeature:
               eventosMunicipio
+
           }
+
         ).addTo(mapa);
+
 
       /*
         Guardar referencias
@@ -1735,78 +2365,167 @@
       capasMunicipios =
         geojson.getLayers();
 
+
       /*
-        Centrar mapa
+        Obtener límites
+        exactos de Antioquia
+      */
+
+      const limitesAntioquia =
+        geojson.getBounds();
+
+
+      /*
+        Centrar el mapa
       */
 
       mapa.fitBounds(
-        geojson.getBounds()
+
+        limitesAntioquia,
+
+        {
+
+          padding: [
+            20,
+            20
+          ]
+
+        }
+
       );
 
+
+      /*
+        Impedir que el usuario
+        se aleje demasiado
+        de Antioquia.
+      */
+
+      mapa.setMaxBounds(
+
+        limitesAntioquia.pad(
+          0.08
+        )
+
+      );
+
+
+      /*
+        Estadísticas
+      */
+
       actualizarEstadisticas();
+
+
+      /*
+        Lista
+      */
 
       actualizarLista();
 
     }
+
   )
 
+
   .catch(
+
     function(error) {
+
 
       console.error(
         "Error cargando el mapa:",
         error
       );
 
+
       alert(
+
         "No se pudo cargar el mapa de Antioquia."
+
       );
 
     }
+
   );
 
 
-  /* ==========================================
+  /* =====================================================
      LEYENDA
-  ========================================== */
+  ===================================================== */
 
   const leyenda =
     L.control({
-      position: "bottomright"
+
+      position:
+        "bottomright"
+
     });
+
 
   leyenda.onAdd =
     function() {
 
+
       const div =
         L.DomUtil.create(
+
           "div",
+
           "leyenda"
+
         );
+
 
       div.innerHTML =
 
         '<div>' +
-          '<span class="leyenda-color" ' +
-          'style="background:#d1d5db"></span>' +
+
+          '<span ' +
+
+          'class="leyenda-color" ' +
+
+          'style="background:#d1d5db">' +
+
+          '</span>' +
+
           'No visitado' +
+
         '</div>' +
+
 
         '<div>' +
-          '<span class="leyenda-color" ' +
-          'style="background:#22c55e"></span>' +
+
+          '<span ' +
+
+          'class="leyenda-color" ' +
+
+          'style="background:#22c55e">' +
+
+          '</span>' +
+
           'Visitado' +
+
         '</div>' +
 
-        '<div style="font-size:11px;color:#6b7280;margin-top:4px">' +
+
+        '<div ' +
+
+        'style="font-size:11px;color:#6b7280;margin-top:4px">' +
+
           'Cada municipio puede tener su propio color' +
+
         '</div>';
+
 
       return div;
 
     };
 
-  leyenda.addTo(mapa);
+
+  leyenda.addTo(
+    mapa
+  );
 
 
 </script>
